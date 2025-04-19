@@ -112,7 +112,7 @@ export default function Evaluate(){
     function saveUserFeedBack(){
         setSaving( true )
 
-        axios.post('http://localHost:3000/evaluations', {
+        axios.post(`http:/192.168.0.5:3000/evaluations`, {
             name: userName,
             email: email,
             feedBack: userExperience,
@@ -138,68 +138,68 @@ export default function Evaluate(){
 
     function validateData(){
 
-        if( userName.trim() == '' ){
-            Alert.alert('Nome inválido')
-        } else 
+        if     ( userName.trim() == '' )      Alert.alert('Nome inválido')
+        else if( email.trim() == '' )         Alert.alert('Email inválido')
+        else if( userExperience.trim() == '') Alert.alert('Nos diga sobre sua experiência com o produto.')
+        else if( option == '') Alert.alert('Nos dia se sua experiência foi feliz, boa, média ou ruim')
+        else saveUserFeedBack()       
 
-        if( email.trim() == '' ){
-            Alert.alert('Email inválido')
-        } else 
+    }
 
-        if( userExperience.trim() == ''){
-            Alert.alert('Nos diga sobre sua experiência com o produto.')
-        } else
-        
-        if( option == '') {
-            Alert.alert('Nos dia se sua experiência foi feliz, boa, média ou ruim')
+    function getContentBySaveStatus(){
+
+        if( saving ){
+            return ( <Text style={{textAlign:'center', fontSize: 20}}>Salvando...</Text> )
+
         } else {
 
-            saveUserFeedBack()
+            return (
+                <>
+
+                    <View style={styles.header}>
+                        <Text style={styles.title}>Nos dê seu FeedBack</Text>
+                        <Text style={styles.subtitle}>Sua opinião é importante para nós. Por favor, compartilhe sua experiência</Text>
+                    </View>
+
+                    <View style={styles.inputsContainer}>
+                        <TextInput style={styles.textInput} placeholder="Seu nome" value={userName} onChangeText={setUserName}></TextInput>
+                        <TextInput style={styles.textInput} placeholder="Seu email" value={email} onChangeText={setEmail}></TextInput>
+
+                        <TextInput style={[styles.textInput, {height: 120}]} placeholder="Descreva sua experiência" onChangeText={setUserExperience}></TextInput>
+                    </View>
+
+                    <View style={styles.inputsContainer}>
+                        <Text style={styles.subtitle}>Compartilhe sua experiência</Text>
+
+                        <OptionPicker style={styles.experiences} onSelectionChange={setOption} value={option} defaultValue={0}>
+                            
+                            {['Feliz', 'Bom', 'Médio', 'Ruim'].map( 
+
+                                (item, i) => <ChoiceItem label={item} value={item} key={i}/>
+
+                            )}
+
+                        </OptionPicker>
+
+                        <View style={styles.checkBoxContainer}>
+                            <CheckBox size={25} state={state} onPress={setState} />
+                            <Text>Recomenda para outras pessoas?</Text>
+                        </View>
+
+                        <TouchableOpacity style={styles.btnContainer} onPress={validateData}>
+                            <Text style={styles.btn}>Enviar FeedBack</Text>
+                        </TouchableOpacity>
+
+                    </View>
+                </>
+            )
         }
 
     }
 
     return (
         <View>
-            {
-                saving ? <Text style={{textAlign:'center', fontSize: 20}}>Salvando...</Text> :<>
-
-            <View style={styles.header}>
-                <Text style={styles.title}>Nos dê seu FeedBack</Text>
-                <Text style={styles.subtitle}>Sua opinião é importante para nós. Por favor, compartilhe sua experiência</Text>
-            </View>
-
-            <View style={styles.inputsContainer}>
-                <TextInput style={styles.textInput} placeholder="Seu nome" value={userName} onChangeText={setUserName}></TextInput>
-                <TextInput style={styles.textInput} placeholder="Seu email" value={email} onChangeText={setEmail}></TextInput>
-
-                <TextInput style={[styles.textInput, {height: 120}]} placeholder="Descreva sua experiência" onChangeText={setUserExperience}></TextInput>
-            </View>
-
-            <View style={styles.inputsContainer}>
-                <Text style={styles.subtitle}>Compartilhe sua experiência</Text>
-
-                <OptionPicker style={styles.experiences} onSelectionChange={setOption} value={option} defaultValue={0}>
-                    
-                    {['Feliz', 'Bom', 'Médio', 'Ruim'].map( 
-
-                        (item, i) => <ChoiceItem label={item} value={item} key={i}/>
-
-                    )}
-
-                </OptionPicker>
-
-                <View style={styles.checkBoxContainer}>
-                    <CheckBox size={25} state={state} onPress={setState} />
-                    <Text>Recomenda para outras pessoas?</Text>
-                </View>
-
-                <TouchableOpacity style={styles.btnContainer} onPress={validateData}>
-                    <Text style={styles.btn}>Enviar FeedBack</Text>
-                </TouchableOpacity>
-
-                </View>
-                </>}
+            { getContentBySaveStatus() }
         </View>
     )
 
@@ -290,3 +290,6 @@ const styles = StyleSheet.create({
         width: "100%",
     },
 })
+
+
+// git checkout -b 
