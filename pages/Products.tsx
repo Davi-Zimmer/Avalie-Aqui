@@ -20,7 +20,7 @@ type Product = {
 }
 
 
-function loadProduct({name, image, brand, price, description}:Product){
+function loadProduct({ name, image, brand, price, description}: Product ){
     return (
         <View style={styles.productContainer}>
             <Image style={styles.productImage} source={{uri: image}}/>
@@ -43,7 +43,6 @@ function loadProduct({name, image, brand, price, description}:Product){
     )
 }
 
-
 export default function Products(){
 
     const [dataBase, setDataBase] = useState<Product[]>([])
@@ -51,12 +50,14 @@ export default function Products(){
     const [loading, setLoading] = useState(true)
 
     async function loadDataBase(){
-        axios.get('http://localHost:3000/products').then( res => {
+        axios.get(`http:/192.168.0.5:3000/products`).then( res => {
+
             setDataBase( res.data )
             setLoading( false )
 
         }).catch( err => {
             console.warn( err )
+            
             Alert.alert('Erro ao pegar os pados')
 
             setLoading( false )
