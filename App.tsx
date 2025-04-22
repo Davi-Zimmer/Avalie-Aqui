@@ -4,8 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from './pages/Home';
 import Products from './pages/Products';
 import FeedBack from './pages/FeedBack';
-// import dotenv from 'dotenv' dotenv não é suportado, não sei o motivo >:(
-// dotenv.config()
 
 const { Navigator, Screen } = createStackNavigator() 
 export default function App() {
