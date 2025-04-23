@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
 
+import { HOST, PORT } from '@env'
+
 interface productInterface {
     id: string
     name: string
@@ -17,7 +19,7 @@ export default function Home ({ navigation }:any){
 
     const [ products, setProducts ] = useState<productInterface[]>([])
 
-    axios.get(`http:/192.168.0.5:3000/products`).then( res => {
+    axios.get(`http:/${HOST}:${PORT}/products`).then( res => {
 
         setProducts( res.data )
       

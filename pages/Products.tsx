@@ -2,6 +2,9 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { StyleSheet, View, Text, Alert, FlatList, Image, TouchableOpacity} from "react-native"
 
+import { HOST, PORT } from '@env'
+
+
 type Product = {
     //id: number
     //name: string
@@ -55,7 +58,7 @@ export default function Products( { navigation } : any ){
     }
 
     async function loadDataBase(){
-        axios.get(`http:/192.168.0.5:3000/products`).then( res => {
+        axios.get(`http:/${HOST}:${PORT}/products`).then( res => {
 
             setDataBase( res.data )
             setLoading( false )
