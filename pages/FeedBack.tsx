@@ -2,6 +2,8 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, Button, ViewStyle,
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import React, { useEffect, useState, useSyncExternalStore } from "react";
 import axios from "axios";
+import { useRoute } from "@react-navigation/native";
+import { HOST, PORT } from '@env'
 
 
 type CheckBoxProps = {
@@ -89,6 +91,12 @@ const OptionPicker:React.FC<OptionPickerProps> = (
 
 export default function Evaluate(){
 
+    const route = useRoute()
+    const { id } = route.params as { id?: number }
+    
+    // if( !params?.id ) console.warn('sem id')
+    // else  console.warn('com id')
+
     const [ state, setState ] = useState( false )
     const [ option, setOption ] = useState('')
 
@@ -112,13 +120,13 @@ export default function Evaluate(){
     function saveUserFeedBack(){
         setSaving( true )
 
-        axios.post(`http:/192.168.0.5:3000/evaluations`, {
+        axios.post(`http:/${HOST}:${PORT}/evaluations`, {
             name: userName,
             email: email,
             feedBack: userExperience,
             experience: option,
             recomend: state,
-            productId: Date.now()
+            productId: id
         }).then( () => {
 
             Alert.alert('Feedback salvo')

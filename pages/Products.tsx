@@ -2,6 +2,9 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { StyleSheet, View, Text, Alert, FlatList, Image, TouchableOpacity} from "react-native"
 
+import { HOST, PORT } from '@env'
+
+
 type Product = {
     //id: number
     //name: string
@@ -20,7 +23,7 @@ type Product = {
 }
 
 
-function loadProduct({ name, image, brand, price, description}: Product ){
+function loadProduct({ name, image, brand, price, description, id }: Product, func:( id: number ) => void ){
     return (
         <View style={styles.productContainer}>
             <Image style={styles.productImage} source={{uri: image}}/>
@@ -34,7 +37,7 @@ function loadProduct({ name, image, brand, price, description}: Product ){
 
                 <Text style={styles.price}>{price}</Text>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={ () => func( id ) }>
                     <Text style={styles.evaluate}>Avaliar</Text>
                 </TouchableOpacity>
 
@@ -43,14 +46,19 @@ function loadProduct({ name, image, brand, price, description}: Product ){
     )
 }
 
-export default function Products(){
+export default function Products( { navigation } : any ){
 
     const [dataBase, setDataBase] = useState<Product[]>([])
     
     const [loading, setLoading] = useState(true)
 
+
+    function gotToFeedback( id:number ){
+        navigation.navigate('FeedBack', { id })
+    }
+
     async function loadDataBase(){
-        axios.get(`http:/192.168.0.5:3000/products`).then( res => {
+        axios.get(`http:/${HOST}:${PORT}/products`).then( res => {
 
             setDataBase( res.data )
             setLoading( false )
@@ -74,7 +82,7 @@ export default function Products(){
         <View>
            <FlatList
                 data={dataBase}
-                renderItem={({item}) => loadProduct(item)}
+                renderItem={({item}) => loadProduct( item, gotToFeedback )}
                 ListEmptyComponent={() => {
                     return (
                         <View>
